@@ -1,61 +1,20 @@
 
 
-//! 1 - State del provider
+
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:formz/formz.dart';
 import 'package:teslo_shop/features/shared/shared.dart';
 
-class LoginFormState {
 
-  final bool isPosting;
-  final bool isFormPosted; //para saber si la persona intentó POSTEARLA y ver si hay errores
-  final bool isValid;
-  final Email email;
-  final Password password;
+//! 3 - StateNotifierProvider - consume afuera 
 
-  LoginFormState({
-  this.isPosting = false, 
-  this.isFormPosted = false, 
-  this.isValid = false, 
-  this.email = const Email.pure(), 
-  this.password = const Password.pure()
-  });
-
-  LoginFormState copyWith({
-
-    bool? isPosting,     // la hacer transacción y es asincronica y verificar usuario
-    bool? isFormPosted,  // usuario da clic en INGRESAR y mostrar errores en en LOGIN
-    bool? isValid,
-    Email? email,
-    Password? password,
-
-  }) => LoginFormState(
-
-    //* si tenemos algunos estos valores será igual a ese valor y si no será al valor que tengamos en el estado
-
-    isPosting: isPosting ?? this.isPosting,
-    isFormPosted: isFormPosted ?? this.isFormPosted,
-    isValid: isValid ?? this.isValid,
-    email: email ?? this.email,
-    password: password ?? this.password,
-
-  );
-
-  @override
-  String toString() {
-    return '''
-      LoginFormState:
-      isPosting: $isPosting
-      isFormPosted: $isFormPosted
-      isValid: $isValid
-      email: $email
-      password: $password
-  ''';
-
-  }
-
+final loginFormProvider = StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(((ref) {
+  
+  return LoginFormNotifier();
+  
 }
+));
 
 
 //! 2 - Como implementamos un notifier
@@ -106,11 +65,56 @@ class LoginFormNotifier extends StateNotifier<LoginFormState> {
 
 }
 
-//! 3 - StateNotifierProvider - consume afuera 
 
-final loginFormProvider = StateNotifierProvider.autoDispose<LoginFormNotifier, LoginFormState>(((ref) {
-  
-  return LoginFormNotifier();
-  
+//! 1 - State del provider
+
+class LoginFormState {
+
+  final bool isPosting;
+  final bool isFormPosted; //para saber si la persona intentó POSTEARLA y ver si hay errores
+  final bool isValid;
+  final Email email;
+  final Password password;
+
+  LoginFormState({
+  this.isPosting = false, 
+  this.isFormPosted = false, 
+  this.isValid = false, 
+  this.email = const Email.pure(), 
+  this.password = const Password.pure()
+  });
+
+  LoginFormState copyWith({
+
+    bool? isPosting,     // al hacer transacción y es asincronica y verificar usuario
+    bool? isFormPosted,  // usuario da clic en INGRESAR y mostrar errores en en LOGIN
+    bool? isValid,
+    Email? email,
+    Password? password,
+
+  }) => LoginFormState(
+
+    //* si tenemos algunos estos valores será igual a ese valor y si no será al valor que tengamos en el estado
+
+    isPosting: isPosting ?? this.isPosting,
+    isFormPosted: isFormPosted ?? this.isFormPosted,
+    isValid: isValid ?? this.isValid,
+    email: email ?? this.email,
+    password: password ?? this.password,
+
+  );
+
+  @override
+  String toString() {
+    return '''
+      LoginFormState:
+      isPosting: $isPosting
+      isFormPosted: $isFormPosted
+      isValid: $isValid
+      email: $email
+      password: $password
+  ''';
+
+  }
+
 }
-));
